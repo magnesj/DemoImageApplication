@@ -1,0 +1,109 @@
+@startuml
+'scale 1200 width
+
+class PdmUiTableEditor{
+
+   QMenu * buildDefaultContextMenu()
+   enableDefaultContextMenu(bool );
+
+}
+
+PdmUiTableEditor  --->  CommandFeatureManager :"GetQAction(id)"
+PdmUiTableEditor --* QTableView
+
+QTableView --> NodeTableMenuCreator : signal CustomContextMenu(QMenu*)
+
+
+NodeTableMenuCreator .. SelectionManager
+NodeTableMenuCreator --->  CommandFeatureManager :"GetQAction(id)"
+
+class MainWindow{
+    refreshAllVisibleToolbars()
+}
+MainWindow --> CommandFeatureManager: updateEnabledState()
+
+class SelectionManager{ 
+    void Select(string contextName, vector<PdmSelectedItem*> selection);
+	vector<PdmSelectedItem*> selection(string contextName);	
+    ---
+    PreHighlightSelection ?
+    ---
+    PdmCommandFeature* activeCommandFeature ?
+}
+
+SelectionManager ---> CommandFeature
+
+
+class CommandFeatureManager{
+    QAction * getQAction (commandId)
+    QAction * getCustomQAction (commandId, QString customText)
+	
+    void updateEnabledState ([commandIdList])
+    slots: 
+	void updateEnabledState (QList<QAction*> actionsToRefresh);
+    ---
+    map<commandId, CommandFeature* > commandFeatureMap;
+	map<QAction*, CommandFeature* > actionToFeatureMap;
+}
+
+CommandFeatureManager ---* "n" CommandFeature
+CommandFeatureManager ---> CommandFeatureFactory : create(commandId)
+
+class CommandFeature{
+	QAction* getAction();
+	QAction* getAction(QString customText);
+	
+	void updateEnabledState();
+	
+slots:
+	void startCommand()    
+	bool isCommandEnabled()
+---
+	virtual StartCommandImpl() = 0
+	string Id
+    map<QString, QAction*> actionMap;
+}
+
+CommandFeature -> CommandFeatureFactory : register
+
+CommandFeature --> "create" ExecuteCommand
+CommandFeature --> "add" AppExecCommandManager
+CommandFeature --* CommandUi
+CommandFeature --* CommandUserProcess
+CommandFeature --> SelectionManager
+
+
+PdmObject <|-- PdmCommandData
+PdmCommandData <|-- SomeCommand
+
+class ExecuteCommand{
+    SomeCommand data
+    exec()
+    undo()
+}
+ExecuteCommand --* SomeCommand
+
+class AppExecCommandManager{
+    void registerExecCommand( ExecuteCommand* cmd)
+    QUndoStack undoStack
+}
+
+AppExecCommandManager --* "n" ExecuteCommand
+
+PdmUiFieldEditorHandle ---> CreateFieldChangedCommand
+CreateFieldChangedCommand --> ExecuteCommand
+CreateFieldChangedCommand --> AppExecCommandManager
+
+class CreateFieldChangedCommand{
+
+}
+note top 
+ Alternativer: 
+  Ifdef, 
+  Different implementations, 
+  Virtual method, 
+  Flytte Exec Command and ExecCommandMgr to Core"
+end note
+
+@enduml
+		
