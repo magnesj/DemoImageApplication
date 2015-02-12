@@ -5,10 +5,20 @@ project (ApplicationCode)
 ################################################################################
 # Qt
 ################################################################################
-set (QT_COMPONENTS_REQUIRED QtCore QtGui QtMain QtOpenGl QtNetwork QtScript QtScriptTools)
-find_package (Qt4 COMPONENTS ${QT_COMPONENTS_REQUIRED})
 
-include (${QT_USE_FILE})
+
+if (CEE_BUILD_QT5)
+  find_package(Qt5Widgets)
+  set (CEE_QT_LIBRARIES Qt5::Widgets)
+
+  # Add compiler flags for building executables (-fPIE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+else() 
+  find_package(Qt4 COMPONENTS QtCore QtGui QtMain REQUIRED)
+  include(${QT_USE_FILE})
+  set (CEE_QT_LIBRARIES ${QT_LIBRARIES})
+endif()
+
 
 
 include_directories(
@@ -39,14 +49,21 @@ list( APPEND CPP_SOURCES
 
 
 # Define files for MOC-ing
-set ( QT_MOC_HEADERS
+set ( QMOC_HEADER_FILES
     MiaApplication.h
     MiuMainWindow.h
 )
 
-qt4_wrap_cpp( MOC_FILES_CPP ${QT_MOC_HEADERS} )
 
-qt4_wrap_ui( FORM_FILES_CPP ${QT_UI_FILES} )
+if (CEE_BUILD_QT5)
+  qt5_wrap_cpp(CEE_QT_MOC_SOURCE_FILES ${QMOC_HEADER_FILES} )
+  qt5_wrap_ui(CEE_QT_UI_HEADER_FILES ${QUI_FILES} )
+#  qt5_add_resources(CEE_QT_RC_FILES_CPP res/XactApp.qrc )
+else()
+  qt4_wrap_cpp(CEE_QT_MOC_SOURCE_FILES ${QMOC_HEADER_FILES} )
+  qt4_wrap_ui(CEE_QT_UI_HEADER_FILES ${QUI_FILES} )
+  #qt4_add_resources(CEE_QT_RC_FILES_CPP res/XactApp.qrc )
+endif()
 
 
 
@@ -66,7 +83,7 @@ source_group( "UserInterface"       FILES ${USER_INTERFACE_FILES} )
 # See CMake symbol WIN32_EXECUTABLE for details
 
 if (MSVC)
-    set( EXE_FILES WIN32)
+#    set( EXE_FILES WIN32)
 elseif (APPLE)
     set( EXE_FILES MACOSX_BUNDLE)
 endif()
@@ -74,7 +91,8 @@ endif()
 set( EXE_FILES
     ${EXE_FILES}
     ${CPP_SOURCES}
-    ${MOC_FILES_CPP}
+    ${CEE_QT_MOC_SOURCE_FILES}
+	${CEE_QT_UI_HEADER_FILES}
     ${FORM_FILES_CPP}
     ${QRC_FILES_CPP}
     ${WIN_RESOURCE}
@@ -90,7 +108,7 @@ set( LINK_LIBRARIES
     cafUserInterface
     cafProjectDataModel
 
-    ${QT_LIBRARIES}
+    ${CEE_QT_LIBRARIES}
 )
 
 

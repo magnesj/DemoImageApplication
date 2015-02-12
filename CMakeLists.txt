@@ -23,6 +23,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 endif() 
 
 
+option(CEE_BUILD_QT5 "Build application using Qt5 (if disabled, Qt4 is used)" ON)
 
 
 

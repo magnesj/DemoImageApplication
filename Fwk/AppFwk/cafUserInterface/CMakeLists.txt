@@ -1,8 +1,17 @@
 cmake_minimum_required (VERSION 2.8)
 
 # Qt
-find_package ( Qt4 COMPONENTS QtCore QtGui QtMain )
-include (${QT_USE_FILE})
+if (CEE_BUILD_QT5)
+  find_package(Qt5Widgets REQUIRED)
+  include_directories(${Qt5Widgets_INCLUDE_DIRS})
+
+  # Add compiler flags for building executables (-fPIE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+else() 
+  find_package(Qt4 COMPONENTS QtCore QtGui QtMain REQUIRED)
+  include(${QT_USE_FILE})
+  set (CEE_QT_LIBRARIES ${QT_LIBRARIES})
+endif()
 
 project (cafUserInterface)
 
@@ -38,8 +47,10 @@ set( QOBJECT_HEADERS
     cafUiTreeModelPdm.h
 )
 
-if ( (${CMAKE_VERSION} VERSION_LESS 2.8.6) OR (NOT CMAKE_AUTOMOC) )
-    qt4_wrap_cpp( MOC_FILES_CPP ${QOBJECT_HEADERS} )
+if (CEE_BUILD_QT5)
+  qt5_wrap_cpp(MOC_FILES_CPP ${QOBJECT_HEADERS} )
+else()
+  qt4_wrap_cpp(MOC_FILES_CPP ${QOBJECT_HEADERS} )
 endif()
 
 
