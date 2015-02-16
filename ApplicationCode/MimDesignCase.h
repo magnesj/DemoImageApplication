@@ -33,12 +33,18 @@ public:
 
     // Fields
     caf::PdmField<QString> name;
+
+    caf::PdmField<QString> filename;
     
     // 
     virtual caf::PdmFieldHandle* userDescriptionField();
 
-    // 
-    void updateModelAndRedraw();
+    virtual void initAfterRead();
+
+    virtual void setupBeforeSave();
+
+    virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+
     
 private:
 };

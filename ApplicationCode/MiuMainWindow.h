@@ -62,6 +62,8 @@ public:
 
     caf::PdmPointersFieldHandle* selectedItemInProjectTree();
 
+    void setTextEditorContent(const QString& text);
+    QString textEditorContent() const;
 
 protected:
     virtual void	closeEvent(QCloseEvent* event);

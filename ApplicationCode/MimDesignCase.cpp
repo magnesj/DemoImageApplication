@@ -17,7 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 #include "MimDesignCase.h"
+#include "MiuMainWindow.h"
 
+#include "cafPdmUiFilePathEditor.h"
+
+#include <QFile>
 
 CAF_PDM_SOURCE_INIT(MimDesignCase, "MimDesignCase");
 
@@ -29,6 +33,8 @@ MimDesignCase::MimDesignCase(void)
 {
     CAF_PDM_InitObject("DesignCase", ":/Folder.png", "", "");
     CAF_PDM_InitField(&name, "name", QString("Case"), "Name", "", "", "");
+    CAF_PDM_InitField(&filename, "filename", QString("Filename"), "Filename", "", "", "");
+    filename.setUiEditorTypeName(caf::PdmUiFilePathEditor::uiEditorTypeName());
 
 }
 
@@ -50,7 +56,39 @@ caf::PdmFieldHandle* MimDesignCase::userDescriptionField()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void MimDesignCase::updateModelAndRedraw()
+void MimDesignCase::initAfterRead()
 {
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QTextStream in(&file);
+    QString line = in.readAll();
+
+    MiuMainWindow::instance()->setTextEditorContent(line);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MimDesignCase::setupBeforeSave()
+{
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+
+    QTextStream out(&file);
+    out << MiuMainWindow::instance()->textEditorContent();
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MimDesignCase::fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue)
+{
+    if (changedField == &filename)
+    {
+        initAfterRead();
+    }
 }
 

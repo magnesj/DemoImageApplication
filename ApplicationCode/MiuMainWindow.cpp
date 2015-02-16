@@ -308,6 +308,7 @@ void MiuMainWindow::cleanupGuiBeforeProjectClose()
     m_pdmUiPropertyView->showProperties(NULL);
     m_projectTreeView->setPdmItem(NULL);
 
+    m_plainTextEdit->clear();
  
     caf::AppExecCommandManager::instance()->undoStack()->clear();
 }
@@ -372,9 +373,7 @@ void MiuMainWindow::configureGuiProjectChanged()
     if (proj)
     {
         proj->updateConnectedEditors();
-        proj->designCases[0]->updateModelAndRedraw();
     }
-
     
     m_projectTreeView->treeView()->expandAll();
 
@@ -655,5 +654,21 @@ void MiuMainWindow::slotIndexChanged()
 {
     m_redoAction->setDisabled(!m_undoView->stack()->canRedo());
     m_undoAction->setDisabled(!m_undoView->stack()->canUndo());
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MiuMainWindow::setTextEditorContent(const QString& text)
+{
+    m_plainTextEdit->setPlainText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+QString MiuMainWindow::textEditorContent() const
+{
+    return m_plainTextEdit->toPlainText();
 }
 
