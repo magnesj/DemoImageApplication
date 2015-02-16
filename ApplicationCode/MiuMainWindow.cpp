@@ -25,6 +25,7 @@
 #include "cafAppExecCommandManager.h"
 #include "cafCommandFeatureManager.h"
 #include "cafCommandFeaturesCore.h"
+#include "cafPdmField.h"
 #include "cafPdmUiPropertyView.h"
 #include "cafPdmUiTableView.h"
 #include "cafPdmUiTreeView.h"
@@ -32,7 +33,6 @@
 
 #include <QAction>
 #include <QApplication>
-
 #include <QCloseEvent>
 #include <QDialog>
 #include <QDockWidget>
@@ -41,6 +41,7 @@
 #include <QHBoxLayout>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSettings>
 #include <QTableView>
@@ -49,8 +50,6 @@
 #include <QTreeView>
 #include <QUndoStack>
 #include <QUndoView>
-#include "cafPdmField.h"
-#include "MimProject.h"
 
 
 MiuMainWindow* MiuMainWindow::sm_mainWindowInstance = NULL;
@@ -71,6 +70,10 @@ MiuMainWindow::MiuMainWindow()
     createMenus();
     createToolBars();
     createDockPanels();
+
+    m_plainTextEdit = new QPlainTextEdit;
+    m_centralFrame->layout()->addWidget(m_plainTextEdit);
+    m_plainTextEdit->setPlainText("Example text");
 
     sm_mainWindowInstance = this;
 }

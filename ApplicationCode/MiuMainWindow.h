@@ -25,6 +25,7 @@
 class QActionGroup;
 class QUndoView;
 class QUndoCommand;
+class QPlainTextEdit;
 
 namespace caf
 {
@@ -128,5 +129,7 @@ private:
 
     caf::PdmUiTreeView*     m_projectTreeView;
     caf::PdmUiPropertyView* m_pdmUiPropertyView;
+
+    QPlainTextEdit* m_plainTextEdit;
 
 };
