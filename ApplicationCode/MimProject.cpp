@@ -19,7 +19,7 @@
 #include "MimProject.h"
 #include "MimDesignCase.h"
 
-CAF_PDM_SOURCE_INIT(MimProject, "MooringDesignGUIProject");
+CAF_PDM_SOURCE_INIT(MimProject, "MinimalApplicationProject");
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------

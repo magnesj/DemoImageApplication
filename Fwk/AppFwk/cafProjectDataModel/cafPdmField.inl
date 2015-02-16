@@ -747,6 +747,7 @@ PdmObject* PdmPointersField<DataType*>::createAppendObject(int indexAfter)
     if (!classKeyword.isEmpty())
     {
         PdmObject* obj = caf::PdmObjectFactory::instance()->create(classKeyword);
+        assert(obj);
 
         insertAt(indexAfter, obj);
 

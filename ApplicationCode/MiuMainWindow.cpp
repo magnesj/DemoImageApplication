@@ -116,13 +116,6 @@ void MiuMainWindow::createActions()
     m_exitAction->setStatusTip(tr("Exit the application"));
     connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
-    // View actions
-    m_zoomToFit = new QAction(QIcon(":/ZoomAll16x16.png"),tr("Zoom to fit"), this);
-    connect(m_zoomToFit, SIGNAL(triggered()), SLOT(slotZoomToFit()));
-    
-    m_defaultView = new QAction(QIcon(":/DownViewArrow.png"), tr("Default view"), this);
-    connect(m_defaultView, SIGNAL(triggered()), SLOT(slotDefaultView()));
-
     // Edit actions
     m_undoAction = new QAction(QIcon(":/undo.png"), tr("Undo"), this);
     m_undoAction->setShortcut(QKeySequence::Undo);
@@ -163,12 +156,6 @@ void MiuMainWindow::createMenus()
     }
 
     {
-        QMenu* menu = menuBar()->addMenu("&View");
-        menu->addAction(m_zoomToFit);
-        menu->addAction(m_defaultView);
-    }
-
-    {
         m_editMenu = menuBar()->addMenu("&Edit");
         connect(m_editMenu, SIGNAL(aboutToShow()), SLOT(slotPopulateEditMenu()));
     }
@@ -199,13 +186,6 @@ void MiuMainWindow::createToolBars()
         toolbar->addAction(m_undoAction);
         toolbar->addAction(m_redoAction);
     }
-      {
-          QToolBar* toolbar = addToolBar("View");
-          toolbar->setObjectName("View");
-
-          toolbar->addAction(m_zoomToFit);
-          toolbar->addAction(m_defaultView);
-      }
 }
 
 
@@ -243,8 +223,6 @@ void MiuMainWindow::createDockPanels()
         m_pdmUiPropertyView->layout()->setContentsMargins(5,0,0,0);
 
         addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
-
-        dockWidget->hide();
     }
 
  
@@ -261,8 +239,6 @@ void MiuMainWindow::createDockPanels()
         dockWidget->setWidget(m_undoView);
 
         addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-
-        dockWidget->hide();
     }
 
    

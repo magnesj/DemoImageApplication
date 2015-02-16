@@ -54,17 +54,20 @@ set ( QMOC_HEADER_FILES
     MiuMainWindow.h
 )
 
+set( QRC_FILES
+    ${QRC_FILES} 
+    Resources/MinimalApp.qrc
+)
 
 if (CEE_BUILD_QT5)
   qt5_wrap_cpp(CEE_QT_MOC_SOURCE_FILES ${QMOC_HEADER_FILES} )
   qt5_wrap_ui(CEE_QT_UI_HEADER_FILES ${QUI_FILES} )
-#  qt5_add_resources(CEE_QT_RC_FILES_CPP res/XactApp.qrc )
+  qt5_add_resources( QRC_FILES_CPP ${QRC_FILES} )
 else()
   qt4_wrap_cpp(CEE_QT_MOC_SOURCE_FILES ${QMOC_HEADER_FILES} )
   qt4_wrap_ui(CEE_QT_UI_HEADER_FILES ${QUI_FILES} )
-  #qt4_add_resources(CEE_QT_RC_FILES_CPP res/XactApp.qrc )
+  qt4_add_resources( QRC_FILES_CPP ${QRC_FILES} )
 endif()
-
 
 
 ################################################################################

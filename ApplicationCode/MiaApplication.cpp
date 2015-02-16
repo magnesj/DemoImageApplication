@@ -29,7 +29,7 @@
 
 
 #define PROJECT_ORGANIZATION_NAME "Ceetron Solutions AS"
-#define PROJECT_APPLICATION_NAME "MooringDesignTool"
+#define PROJECT_APPLICATION_NAME "MinimalApplication"
  
 //--------------------------------------------------------------------------------------------------
 /// 
@@ -97,7 +97,7 @@ bool MiaApplication::loadProject(const QString& projectFileName)
 bool MiaApplication::loadProject()
 {
     QString startPath = QDir::home().absolutePath();
-    QString fileName = QFileDialog::getOpenFileName(NULL, "Open Project", startPath, "Project (*.mdp);;All files(*.*)");
+    QString fileName = QFileDialog::getOpenFileName(NULL, "Open Project", startPath, "Project (*.mip);;All files(*.*)");
 
     if (fileName.isEmpty()) return true;
 
@@ -149,9 +149,9 @@ bool MiaApplication::saveProjectPromptForFileName()
         startPath = QDir::home().absolutePath();
     }
 
-    startPath += "/MooringDesign.mdp";
+    startPath += "/MinimalApplication.mip";
 
-    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save File"), startPath, tr("Project Files (*.mdp);;All files(*.*)"));
+    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save File"), startPath, tr("Project Files (*.mip);;All files(*.*)"));
     if (fileName.isEmpty())
     {
         return false;
