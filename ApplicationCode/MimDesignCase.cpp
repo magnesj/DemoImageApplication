@@ -58,14 +58,7 @@ caf::PdmFieldHandle* MimDesignCase::userDescriptionField()
 //--------------------------------------------------------------------------------------------------
 void MimDesignCase::initAfterRead()
 {
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-
-    QTextStream in(&file);
-    QString line = in.readAll();
-
-    MiuMainWindow::instance()->setTextEditorContent(line);
+    updateTextEditContent();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,7 +81,24 @@ void MimDesignCase::fieldChangedByUi(const caf::PdmFieldHandle* changedField, co
 {
     if (changedField == &filename)
     {
-        initAfterRead();
+        updateTextEditContent();
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MimDesignCase::updateTextEditContent()
+{
+    QString textString;
+
+    QFile file(filename);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        textString = in.readAll();
+    }
+
+    MiuMainWindow::instance()->setTextEditorContent(textString);
 }
 
