@@ -36,6 +36,8 @@ MimDesignCase::MimDesignCase(void)
     CAF_PDM_InitField(&filename, "filename", QString("Filename"), "Filename", "", "", "");
     filename.setUiEditorTypeName(caf::PdmUiFilePathEditor::uiEditorTypeName());
 
+    CAF_PDM_InitField(&imageFileName, "imageFileName", QString("ImageFilename"), "Image Filename", "", "", "");
+    imageFileName.setUiEditorTypeName(caf::PdmUiFilePathEditor::uiEditorTypeName());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,6 +61,9 @@ caf::PdmFieldHandle* MimDesignCase::userDescriptionField()
 void MimDesignCase::initAfterRead()
 {
     updateTextEditContent();
+
+    readImageFromFile();
+    updateDisplayImage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,6 +88,12 @@ void MimDesignCase::fieldChangedByUi(const caf::PdmFieldHandle* changedField, co
     {
         updateTextEditContent();
     }
+
+    if (changedField == &imageFileName)
+    {
+        readImageFromFile();
+        updateDisplayImage();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -100,5 +111,37 @@ void MimDesignCase::updateTextEditContent()
     }
 
     MiuMainWindow::instance()->setTextEditorContent(textString);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MimDesignCase::defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering)
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MimDesignCase::readImageFromFile()
+{
+    m_image = QImage(imageFileName);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MimDesignCase::updateDisplayImage()
+{
+    MiuMainWindow::instance()->setImage(m_image);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+QImage& MimDesignCase::image()
+{
+    return m_image;
 }
 

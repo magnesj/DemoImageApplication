@@ -50,6 +50,8 @@
 #include <QTreeView>
 #include <QUndoStack>
 #include <QUndoView>
+#include <QLabel>
+#include <QScrollArea>
 
 
 MiuMainWindow* MiuMainWindow::sm_mainWindowInstance = NULL;
@@ -74,6 +76,17 @@ MiuMainWindow::MiuMainWindow()
     m_plainTextEdit = new QPlainTextEdit;
     m_centralFrame->layout()->addWidget(m_plainTextEdit);
     m_plainTextEdit->setPlainText("Example text");
+
+
+    m_imageLabel = new QLabel;
+    m_imageLabel->setBackgroundRole(QPalette::Base);
+    m_imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_imageLabel->setScaledContents(true);
+
+    m_scrollArea = new QScrollArea;
+    m_scrollArea->setBackgroundRole(QPalette::Dark);
+    m_scrollArea->setWidget(m_imageLabel);
+    m_centralFrame->layout()->addWidget(m_scrollArea);
 
     sm_mainWindowInstance = this;
 }
@@ -309,6 +322,7 @@ void MiuMainWindow::cleanupGuiBeforeProjectClose()
     m_projectTreeView->setPdmItem(NULL);
 
     m_plainTextEdit->clear();
+    m_imageLabel->clear();
  
     caf::AppExecCommandManager::instance()->undoStack()->clear();
 }
@@ -670,5 +684,14 @@ void MiuMainWindow::setTextEditorContent(const QString& text)
 QString MiuMainWindow::textEditorContent() const
 {
     return m_plainTextEdit->toPlainText();
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void MiuMainWindow::setImage(const QImage& image)
+{
+    m_imageLabel->setPixmap(QPixmap::fromImage(image));
+    m_imageLabel->adjustSize();
 }
 

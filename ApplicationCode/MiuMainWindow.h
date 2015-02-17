@@ -26,6 +26,8 @@ class QActionGroup;
 class QUndoView;
 class QUndoCommand;
 class QPlainTextEdit;
+class QScrollArea;
+class QLabel;
 
 namespace caf
 {
@@ -64,6 +66,8 @@ public:
 
     void setTextEditorContent(const QString& text);
     QString textEditorContent() const;
+
+    void setImage(const QImage& image);
 
 protected:
     virtual void	closeEvent(QCloseEvent* event);
@@ -134,4 +138,6 @@ private:
 
     QPlainTextEdit* m_plainTextEdit;
 
+    QLabel*         m_imageLabel;
+    QScrollArea*    m_scrollArea;
 };

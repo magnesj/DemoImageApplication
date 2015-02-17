@@ -35,6 +35,7 @@ set( APPLICATION_FILES
     
     MimProject.cpp
     MimDesignCase.cpp
+    MimFilterSettings.cpp
 )
 
 set( USER_INTERFACE_FILES

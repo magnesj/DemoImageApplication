@@ -22,40 +22,48 @@
 
 #include "cafPdmObject.h"
 #include "cafPdmField.h"
+#include "cafAppEnum.h"
 
 
-class MimDesignCase : public caf::PdmObject
+class MimFilterSettings : public caf::PdmObject
 {
     CAF_PDM_HEADER_INIT;
 public:
-    MimDesignCase(void);
-    virtual ~MimDesignCase(void);
+
+    enum FilterType
+    {
+        FILTER_SMALL, FILTER_MEDIUM, FILTER_LARGE, FILTER_CUSTOM
+    };
+
+    MimFilterSettings(void);
+    virtual ~MimFilterSettings(void);
 
     // Fields
     caf::PdmField<QString> name;
+    
+    caf::PdmField<QString> imageToManipulate;
+    
+    caf::PdmField< caf::AppEnum<FilterType> > filterType;
 
-    caf::PdmField<QString> filename;
-    caf::PdmField<QString> imageFileName;
+    caf::PdmField<int> nx;
+    caf::PdmField<int> ny;
+    caf::PdmField<int> nz;
+
+    caf::PdmField<bool> apply;
+
+
     
     // 
     virtual caf::PdmFieldHandle* userDescriptionField();
 
-    virtual void initAfterRead();
-
-    virtual void setupBeforeSave();
-
     virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+
+    virtual void defineEditorAttribute(const caf::PdmFieldHandle* field, QString uiConfigName, caf::PdmUiEditorAttribute * attribute);
     virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
 
-    QImage& image();
-    void updateDisplayImage();
-    
-private:
-    void updateTextEditContent();
-    void readImageFromFile();
-
+    virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool * useOptionsOnly);
 
 private:
-    QImage m_image;
+    void applyFilter();
 
 };

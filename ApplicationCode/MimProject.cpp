@@ -18,6 +18,7 @@
 
 #include "MimProject.h"
 #include "MimDesignCase.h"
+#include "MimFilterSettings.h"
 
 CAF_PDM_SOURCE_INIT(MimProject, "MinimalApplicationProject");
 //--------------------------------------------------------------------------------------------------
@@ -28,10 +29,12 @@ MimProject::MimProject(void)
     CAF_PDM_InitObject("Project", "", "", "");
 
     CAF_PDM_InitFieldNoDefault(&designCases, "DesignCases", "DesignCases", "", "", "");
+    CAF_PDM_InitFieldNoDefault(&filterSettings, "FilterSettings", "FilterSettings", "", "", "");
 
     designCases.push_back(new MimDesignCase);
     //    designCases.setUiHidden(true);
 
+    filterSettings.push_back(new MimFilterSettings);
 }
 
 //--------------------------------------------------------------------------------------------------
