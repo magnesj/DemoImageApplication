@@ -51,9 +51,6 @@ public:
 
     caf::PdmField<bool> apply;
 
-
-    
-    // 
     virtual caf::PdmFieldHandle* userDescriptionField();
 
     virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
@@ -65,5 +62,7 @@ public:
 
 private:
     void applyFilter();
+
+    std::vector<float> compute1dGaussianKernel(int inRadius, float inWeight);
 
 };

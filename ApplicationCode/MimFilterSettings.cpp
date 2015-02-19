@@ -28,6 +28,9 @@
 #include "cafPdmUiComboBoxEditor.h"
 #include "cafPdmUiLineEditor.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 
 
 template<>
@@ -153,6 +156,7 @@ QList<caf::PdmOptionItemInfo> MimFilterSettings::calculateValueOptions(const caf
 //--------------------------------------------------------------------------------------------------
 void MimFilterSettings::applyFilter()
 {
+
     MimProject* proj = MiaApplication::instance()->project();
     if (proj)
     {
@@ -164,14 +168,65 @@ void MimFilterSettings::applyFilter()
             {
                 QImage& img = dc->image();
 
-                for (int i = 0; i < img.width(); i++)
-                {
-                    for (int j = 0; j < img.height(); j++)
-                    {
-                        //QRgb col = img.pixel(i, j);
-                        //col = 
+                float weight = 1.0f;
 
-                        img.setPixel(i, j, qRgb(i, j, 0));
+                {
+                    std::vector<float> kernel = compute1dGaussianKernel(nx, weight);
+
+                    float blurR = 0.0f;
+                    float blurG = 0.0f;
+                    float blurB = 0.0f;
+
+                    for (int y = 0; y < img.height(); y++)
+                    {
+                        for (int x = 0; x < img.width(); x++)
+                        {
+                            blurR = 0.0f;
+                            blurG = 0.0f;
+                            blurB = 0.0f;
+
+                            for (int offset = 0; offset < kernel.size(); offset++)
+                            {
+                                int sx = qBound(0, img.width() - 1, (x - nx) + offset);
+                                QRgb col = img.pixel(sx, y);
+
+                                blurR += qRed(col)   * kernel[offset];
+                                blurG += qGreen(col) * kernel[offset];
+                                blurB += qBlue(col)  * kernel[offset];
+                            }
+
+                            img.setPixel(x, y, qRgb(blurR, blurG, blurB));
+                        }
+                    }
+                }
+                
+                {
+                    std::vector<float> kernel = compute1dGaussianKernel(ny, weight);
+
+                    float blurR = 0.0f;
+                    float blurG = 0.0f;
+                    float blurB = 0.0f;
+
+                    for (int x = 0; x < img.width(); x++)
+                    {
+                        for (int y = 0; y < img.height(); y++)
+                        {
+                            blurR = 0.0f;
+                            blurG = 0.0f;
+                            blurB = 0.0f;
+                            
+                            for (int offset = 0; offset < kernel.size(); offset++)
+                            {
+                                int sy = qBound(0, img.height() - 1, (y - ny) + offset);
+                                QRgb col = img.pixel(x, sy);
+
+                                blurR += qRed(col)   * kernel[offset];
+                                blurG += qGreen(col) * kernel[offset];
+                                blurB += qBlue(col)  * kernel[offset];
+                            }
+
+                            img.setPixel(x, y, qRgb(blurR, blurG, blurB));
+                        }
                     }
                 }
 
@@ -179,5 +234,40 @@ void MimFilterSettings::applyFilter()
             }
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+std::vector<float> MimFilterSettings::compute1dGaussianKernel(int inRadius, float inWeight)
+{
+    std::vector<float> kernel;
+    
+    int mem_amount = (inRadius * 2) + 1;
+
+    float twoRadiusSquaredRecip = 1.0 / (2.0 * inRadius * inRadius);
+    float sqrtTwoPiTimesRadiusRecip = 1.0 / (sqrt(2.0 * M_PI) * inRadius);
+    float radiusModifier = inWeight;
+
+    // Create Gaussian Kernel
+    int r = -inRadius;
+    float sum = 0.0f;
+    for (int i = 0; i < mem_amount; i++)
+    {
+        float x = r * radiusModifier;
+        x *= x;
+        float v = sqrtTwoPiTimesRadiusRecip * exp(-x * twoRadiusSquaredRecip);
+        kernel.push_back(v);
+
+        sum += v;
+        r++;
+    }
+
+    // Normalize distribution
+    float div = sum;
+    for (int i = 0; i < mem_amount; i++)
+        kernel[i] /= div;
+
+    return kernel;
 }
 
