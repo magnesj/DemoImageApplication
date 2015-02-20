@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     MiuMainWindow window;
     window.setWindowTitle("MinimalApplication");
+    window.setMinimumSize(800, 600);
     window.show();
 
     return app.exec();

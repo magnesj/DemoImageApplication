@@ -50,12 +50,12 @@ public:
     QImage& image();
     void updateDisplayImage();
     
+    void readImageFromFile();
+    
 private:
     void updateTextEditContent();
-    void readImageFromFile();
 
 
 private:
     QImage m_image;
-
 };

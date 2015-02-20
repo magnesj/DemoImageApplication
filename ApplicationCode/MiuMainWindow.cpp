@@ -74,8 +74,9 @@ MiuMainWindow::MiuMainWindow()
     createDockPanels();
 
     m_plainTextEdit = new QPlainTextEdit;
-    m_centralFrame->layout()->addWidget(m_plainTextEdit);
+    //m_centralFrame->layout()->addWidget(m_plainTextEdit);
     m_plainTextEdit->setPlainText("Example text");
+    m_plainTextEdit->hide();
 
 
     m_imageLabel = new QLabel;

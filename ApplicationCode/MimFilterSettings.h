@@ -24,6 +24,8 @@
 #include "cafPdmField.h"
 #include "cafAppEnum.h"
 
+class MimDesignCase;
+
 
 class MimFilterSettings : public caf::PdmObject
 {
@@ -47,9 +49,9 @@ public:
 
     caf::PdmField<int> nx;
     caf::PdmField<int> ny;
-    caf::PdmField<int> nz;
 
     caf::PdmField<bool> apply;
+    caf::PdmField<bool> restore;
 
     virtual caf::PdmFieldHandle* userDescriptionField();
 
@@ -61,6 +63,7 @@ public:
     virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool * useOptionsOnly);
 
 private:
+    MimDesignCase* findCaseByName(const QString& caseName) const;
     void applyFilter();
 
     std::vector<float> compute1dGaussianKernel(int inRadius, float inWeight);

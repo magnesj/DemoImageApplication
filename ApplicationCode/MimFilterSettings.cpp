@@ -63,14 +63,18 @@ MimFilterSettings::MimFilterSettings(void)
 
     CAF_PDM_InitField(&nx, "NX", 1, "NX", "", "", "");
     CAF_PDM_InitField(&ny, "NY", 1, "NX", "", "", "");
-    CAF_PDM_InitField(&nz, "NZ", 1, "NX", "", "", "");
 
-    CAF_PDM_InitField(&apply, "Toggle", false, "Apply", "", "", "");
+    CAF_PDM_InitField(&apply, "Apply", false, "Apply", "", "", "");
     apply.setIOReadable(false);
     apply.setIOWritable(false);
     apply.setUiEditorTypeName(caf::PdmUiPushButtonEditor::uiEditorTypeName());
     apply.setUiLabelPosition(caf::PdmUiItemInfo::HIDDEN);
 
+    CAF_PDM_InitField(&restore, "Restore", false, "Restore", "", "", "");
+    restore.setIOReadable(false);
+    restore.setIOWritable(false);
+    restore.setUiEditorTypeName(caf::PdmUiPushButtonEditor::uiEditorTypeName());
+    restore.setUiLabelPosition(caf::PdmUiItemInfo::HIDDEN);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,6 +101,35 @@ void MimFilterSettings::fieldChangedByUi(const caf::PdmFieldHandle* changedField
     {
         applyFilter();
     }
+    else if (changedField == &restore)
+    {
+        MimDesignCase* dc = findCaseByName(imageToManipulate);
+        if (dc)
+        {
+            dc->readImageFromFile();
+            dc->updateDisplayImage();
+        }
+    }
+    else if (changedField == &filterType)
+    {
+        if (filterType == FILTER_SMALL)
+        {
+            nx = 1;
+            ny = 1;
+        }
+        else if (filterType == FILTER_MEDIUM)
+        {
+            nx = 2;
+            ny = 2;
+        }
+        else if (filterType == FILTER_LARGE)
+        {
+            nx = 5;
+            ny = 5;
+        }
+
+        updateConnectedEditors();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -109,6 +142,11 @@ void MimFilterSettings::defineEditorAttribute(const caf::PdmFieldHandle* field, 
         caf::PdmUiPushButtonEditorAttribute* attrib = dynamic_cast<caf::PdmUiPushButtonEditorAttribute*> (attribute);
         attrib->m_buttonText = "Apply";
     }
+    else if (&restore == field)
+    {
+        caf::PdmUiPushButtonEditorAttribute* attrib = dynamic_cast<caf::PdmUiPushButtonEditorAttribute*> (attribute);
+        attrib->m_buttonText = "Restore";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,9 +158,6 @@ void MimFilterSettings::defineUiOrdering(QString uiConfigName, caf::PdmUiOrderin
     
     nx.setUiReadOnly(!customFilter);
     ny.setUiReadOnly(!customFilter);
-    nz.setUiReadOnly(!customFilter);
-
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,83 +191,74 @@ QList<caf::PdmOptionItemInfo> MimFilterSettings::calculateValueOptions(const caf
 //--------------------------------------------------------------------------------------------------
 void MimFilterSettings::applyFilter()
 {
-
-    MimProject* proj = MiaApplication::instance()->project();
-    if (proj)
+    MimDesignCase* dc = findCaseByName(imageToManipulate);
+    if (dc)
     {
-        for (size_t i = 0; i < proj->designCases.size(); i++)
+        QImage& img = dc->image();
+
+        float weight = 1.0f;
+
         {
-            MimDesignCase* dc = proj->designCases()[i];
+            std::vector<float> kernel = compute1dGaussianKernel(nx, weight);
 
-            if (dc->name() == imageToManipulate)
+            float blurR = 0.0f;
+            float blurG = 0.0f;
+            float blurB = 0.0f;
+
+            for (int y = 0; y < img.height(); y++)
             {
-                QImage& img = dc->image();
-
-                float weight = 1.0f;
-
+                for (int x = 0; x < img.width(); x++)
                 {
-                    std::vector<float> kernel = compute1dGaussianKernel(nx, weight);
+                    blurR = 0.0f;
+                    blurG = 0.0f;
+                    blurB = 0.0f;
 
-                    float blurR = 0.0f;
-                    float blurG = 0.0f;
-                    float blurB = 0.0f;
-
-                    for (int y = 0; y < img.height(); y++)
+                    for (int offset = 0; offset < kernel.size(); offset++)
                     {
-                        for (int x = 0; x < img.width(); x++)
-                        {
-                            blurR = 0.0f;
-                            blurG = 0.0f;
-                            blurB = 0.0f;
+                        int sx = qBound(0, img.width() - 1, (x - nx) + offset);
+                        QRgb col = img.pixel(sx, y);
 
-                            for (int offset = 0; offset < kernel.size(); offset++)
-                            {
-                                int sx = qBound(0, img.width() - 1, (x - nx) + offset);
-                                QRgb col = img.pixel(sx, y);
-
-                                blurR += qRed(col)   * kernel[offset];
-                                blurG += qGreen(col) * kernel[offset];
-                                blurB += qBlue(col)  * kernel[offset];
-                            }
-
-                            img.setPixel(x, y, qRgb(blurR, blurG, blurB));
-                        }
+                        blurR += qRed(col)   * kernel[offset];
+                        blurG += qGreen(col) * kernel[offset];
+                        blurB += qBlue(col)  * kernel[offset];
                     }
+
+                    img.setPixel(x, y, qRgb(blurR, blurG, blurB));
                 }
-                
-                {
-                    std::vector<float> kernel = compute1dGaussianKernel(ny, weight);
-
-                    float blurR = 0.0f;
-                    float blurG = 0.0f;
-                    float blurB = 0.0f;
-
-                    for (int x = 0; x < img.width(); x++)
-                    {
-                        for (int y = 0; y < img.height(); y++)
-                        {
-                            blurR = 0.0f;
-                            blurG = 0.0f;
-                            blurB = 0.0f;
-                            
-                            for (int offset = 0; offset < kernel.size(); offset++)
-                            {
-                                int sy = qBound(0, img.height() - 1, (y - ny) + offset);
-                                QRgb col = img.pixel(x, sy);
-
-                                blurR += qRed(col)   * kernel[offset];
-                                blurG += qGreen(col) * kernel[offset];
-                                blurB += qBlue(col)  * kernel[offset];
-                            }
-
-                            img.setPixel(x, y, qRgb(blurR, blurG, blurB));
-                        }
-                    }
-                }
-
-                dc->updateDisplayImage();
             }
         }
+                
+        {
+            std::vector<float> kernel = compute1dGaussianKernel(ny, weight);
+
+            float blurR = 0.0f;
+            float blurG = 0.0f;
+            float blurB = 0.0f;
+
+            for (int x = 0; x < img.width(); x++)
+            {
+                for (int y = 0; y < img.height(); y++)
+                {
+                    blurR = 0.0f;
+                    blurG = 0.0f;
+                    blurB = 0.0f;
+                            
+                    for (int offset = 0; offset < kernel.size(); offset++)
+                    {
+                        int sy = qBound(0, img.height() - 1, (y - ny) + offset);
+                        QRgb col = img.pixel(x, sy);
+
+                        blurR += qRed(col)   * kernel[offset];
+                        blurG += qGreen(col) * kernel[offset];
+                        blurB += qBlue(col)  * kernel[offset];
+                    }
+
+                    img.setPixel(x, y, qRgb(blurR, blurG, blurB));
+                }
+            }
+        }
+
+        dc->updateDisplayImage();
     }
 }
 
@@ -269,5 +295,24 @@ std::vector<float> MimFilterSettings::compute1dGaussianKernel(int inRadius, floa
         kernel[i] /= div;
 
     return kernel;
+}
+
+MimDesignCase* MimFilterSettings::findCaseByName(const QString& caseName) const
+{
+    MimProject* proj = MiaApplication::instance()->project();
+    if (proj)
+    {
+        for (size_t i = 0; i < proj->designCases.size(); i++)
+        {
+            MimDesignCase* dc = proj->designCases()[i];
+
+            if (dc->name() == caseName)
+            {
+                return dc;
+            }
+        }
+    }
+
+    return NULL;
 }
 
