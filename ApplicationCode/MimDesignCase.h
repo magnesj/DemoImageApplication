@@ -33,7 +33,6 @@ public:
 
     // Fields
     caf::PdmField<QString> name;
-    caf::PdmField<QString> filename;
     caf::PdmField<QString> imageFileName;
 
     // Public interface
@@ -49,12 +48,7 @@ protected:
 
     // Application Framework
     virtual void initAfterRead();
-    virtual void setupBeforeSave();
-    virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
     
-private:
-    void updateTextEditContent();
-
 
 private:
     QImage m_image;

@@ -73,12 +73,6 @@ MiuMainWindow::MiuMainWindow()
     createToolBars();
     createDockPanels();
 
-    m_plainTextEdit = new QPlainTextEdit;
-    //m_centralFrame->layout()->addWidget(m_plainTextEdit);
-    m_plainTextEdit->setPlainText("Example text");
-    m_plainTextEdit->hide();
-
-
     m_imageLabel = new QLabel;
     m_imageLabel->setBackgroundRole(QPalette::Base);
     m_imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -322,7 +316,6 @@ void MiuMainWindow::cleanupGuiBeforeProjectClose()
     m_pdmUiPropertyView->showProperties(NULL);
     m_projectTreeView->setPdmItem(NULL);
 
-    m_plainTextEdit->clear();
     m_imageLabel->clear();
  
     caf::AppExecCommandManager::instance()->undoStack()->clear();
@@ -669,22 +662,6 @@ void MiuMainWindow::slotIndexChanged()
 {
     m_redoAction->setDisabled(!m_undoView->stack()->canRedo());
     m_undoAction->setDisabled(!m_undoView->stack()->canUndo());
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-void MiuMainWindow::setTextEditorContent(const QString& text)
-{
-    m_plainTextEdit->setPlainText(text);
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-QString MiuMainWindow::textEditorContent() const
-{
-    return m_plainTextEdit->toPlainText();
 }
 
 //--------------------------------------------------------------------------------------------------

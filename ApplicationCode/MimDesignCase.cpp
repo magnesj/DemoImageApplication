@@ -33,9 +33,6 @@ MimDesignCase::MimDesignCase(void)
 {
     CAF_PDM_InitObject("DesignCase", ":/Folder.png", "", "");
     CAF_PDM_InitField(&name, "name", QString("Case"), "Name", "", "", "");
-    CAF_PDM_InitField(&filename, "filename", QString("Filename"), "Filename", "", "", "");
-    filename.setUiEditorTypeName(caf::PdmUiFilePathEditor::uiEditorTypeName());
-
     CAF_PDM_InitField(&imageFileName, "imageFileName", QString("ImageFilename"), "Image Filename", "", "", "");
     imageFileName.setUiEditorTypeName(caf::PdmUiFilePathEditor::uiEditorTypeName());
 }
@@ -60,8 +57,6 @@ caf::PdmFieldHandle* MimDesignCase::userDescriptionField()
 //--------------------------------------------------------------------------------------------------
 void MimDesignCase::initAfterRead()
 {
-    updateTextEditContent();
-
     readImageFromFile();
     updateDisplayImage();
 }
@@ -69,56 +64,13 @@ void MimDesignCase::initAfterRead()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void MimDesignCase::setupBeforeSave()
-{
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-
-    QTextStream out(&file);
-    out << MiuMainWindow::instance()->textEditorContent();
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
 void MimDesignCase::fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue)
 {
-    if (changedField == &filename)
-    {
-        updateTextEditContent();
-    }
-
     if (changedField == &imageFileName)
     {
         readImageFromFile();
         updateDisplayImage();
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-void MimDesignCase::updateTextEditContent()
-{
-    QString textString;
-
-    QFile file(filename);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream in(&file);
-        textString = in.readAll();
-    }
-
-    MiuMainWindow::instance()->setTextEditorContent(textString);
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-void MimDesignCase::defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering)
-{
-
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -60,12 +60,7 @@ public:
     void updateApplicationStateUI();
     void markUndoStackAsClean();
 
-    void setSelectionInfoText(const QString& text);
-
     caf::PdmPointersFieldHandle* selectedItemInProjectTree();
-
-    void setTextEditorContent(const QString& text);
-    QString textEditorContent() const;
 
     void setImage(const QImage& image);
 
@@ -135,8 +130,6 @@ private:
 
     caf::PdmUiTreeView*     m_projectTreeView;
     caf::PdmUiPropertyView* m_pdmUiPropertyView;
-
-    QPlainTextEdit* m_plainTextEdit;
 
     QLabel*         m_imageLabel;
     QScrollArea*    m_scrollArea;
