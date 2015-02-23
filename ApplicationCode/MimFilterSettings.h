@@ -48,14 +48,14 @@ public:
     caf::PdmField<int> nx;
     caf::PdmField<int> ny;
 
-    caf::PdmField<bool> apply;
-    caf::PdmField<bool> restore;
+    caf::PdmField<bool> applyButton;
+    caf::PdmField<bool> restoreButton;
 
     void updateDisplayOfConnectedImage();
 
     // Application Framework
-    virtual caf::PdmFieldHandle* userDescriptionField();
-    virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+    virtual caf::PdmFieldHandle*          userDescriptionField();
+    virtual void                          fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
     virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool * useOptionsOnly);
 
 protected:
@@ -64,9 +64,8 @@ protected:
     virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
 
 private:
-    MimImage* findImageObjectByName(const QString& caseName) const;
-    void applyFilter();
+    MimImage*           findImageObjectByName(const QString& caseName) const;
+    void                applyFilter();
 
     std::vector<float> compute1dGaussianKernel(int inRadius, float inWeight);
-
 };

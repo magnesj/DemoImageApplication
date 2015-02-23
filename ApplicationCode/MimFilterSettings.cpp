@@ -64,17 +64,17 @@ MimFilterSettings::MimFilterSettings(void)
     CAF_PDM_InitField(&nx, "NX", 1, "NX", "", "", "");
     CAF_PDM_InitField(&ny, "NY", 1, "NX", "", "", "");
 
-    CAF_PDM_InitField(&apply, "Apply", false, "Apply", "", "", "");
-    apply.setIOReadable(false);
-    apply.setIOWritable(false);
-    apply.setUiEditorTypeName(caf::PdmUiPushButtonEditor::uiEditorTypeName());
-    apply.setUiLabelPosition(caf::PdmUiItemInfo::HIDDEN);
+    CAF_PDM_InitField(&applyButton, "Apply", false, "Apply", "", "", "");
+    applyButton.setIOReadable(false);
+    applyButton.setIOWritable(false);
+    applyButton.setUiEditorTypeName(caf::PdmUiPushButtonEditor::uiEditorTypeName());
+    applyButton.setUiLabelPosition(caf::PdmUiItemInfo::HIDDEN);
 
-    CAF_PDM_InitField(&restore, "Restore", false, "Restore", "", "", "");
-    restore.setIOReadable(false);
-    restore.setIOWritable(false);
-    restore.setUiEditorTypeName(caf::PdmUiPushButtonEditor::uiEditorTypeName());
-    restore.setUiLabelPosition(caf::PdmUiItemInfo::HIDDEN);
+    CAF_PDM_InitField(&restoreButton, "Restore", false, "Restore", "", "", "");
+    restoreButton.setIOReadable(false);
+    restoreButton.setIOWritable(false);
+    restoreButton.setUiEditorTypeName(caf::PdmUiPushButtonEditor::uiEditorTypeName());
+    restoreButton.setUiLabelPosition(caf::PdmUiItemInfo::HIDDEN);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,11 +105,11 @@ void MimFilterSettings::fieldChangedByUi(const caf::PdmFieldHandle* changedField
             dc->redrawImageInDisplayWidget();
         }
     }
-    else if (changedField == &apply)
+    else if (changedField == &applyButton)
     {
         applyFilter();
     }
-    else if (changedField == &restore)
+    else if (changedField == &restoreButton)
     {
         MimImage* dc = findImageObjectByName(imageToManipulate);
         if (dc)
@@ -145,12 +145,12 @@ void MimFilterSettings::fieldChangedByUi(const caf::PdmFieldHandle* changedField
 //--------------------------------------------------------------------------------------------------
 void MimFilterSettings::defineEditorAttribute(const caf::PdmFieldHandle* field, QString uiConfigName, caf::PdmUiEditorAttribute * attribute)
 {
-    if (&apply == field)
+    if (&applyButton == field)
     {
         caf::PdmUiPushButtonEditorAttribute* attrib = dynamic_cast<caf::PdmUiPushButtonEditorAttribute*> (attribute);
         attrib->m_buttonText = "Apply";
     }
-    else if (&restore == field)
+    else if (&restoreButton == field)
     {
         caf::PdmUiPushButtonEditorAttribute* attrib = dynamic_cast<caf::PdmUiPushButtonEditorAttribute*> (attribute);
         attrib->m_buttonText = "Restore";
@@ -306,6 +306,9 @@ std::vector<float> MimFilterSettings::compute1dGaussianKernel(int inRadius, floa
     return kernel;
 }
 
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
 MimImage* MimFilterSettings::findImageObjectByName(const QString& caseName) const
 {
     MimProject* proj = MiaApplication::instance()->project();
@@ -325,6 +328,9 @@ MimImage* MimFilterSettings::findImageObjectByName(const QString& caseName) cons
     return NULL;
 }
 
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
 void MimFilterSettings::updateDisplayOfConnectedImage()
 {
     MimImage* mimImage = findImageObjectByName(imageToManipulate);
