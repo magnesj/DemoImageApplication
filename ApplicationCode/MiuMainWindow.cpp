@@ -19,8 +19,9 @@
 
 #include "MiuMainWindow.h"
 #include "MiaApplication.h"
-#include "MimProject.h"
+#include "MimFilterSettings.h"
 #include "MimImage.h"
+#include "MimProject.h"
 
 #include "cafAppExecCommandManager.h"
 #include "cafCommandFeatureManager.h"
@@ -267,6 +268,19 @@ void MiuMainWindow::selectedObjectsChanged(const QItemSelection& selected, const
     {
         caf::PdmObject* pdmObject = dynamic_cast<caf::PdmObject*>(uiItems[0]);
         m_pdmUiPropertyView->showProperties(pdmObject);
+
+        MimImage* mimImage = dynamic_cast<MimImage*>(pdmObject);
+        if (mimImage)
+        {
+            mimImage->redrawImageInDisplayWidget();
+        }
+
+        MimFilterSettings* mimFilter = dynamic_cast<MimFilterSettings*>(pdmObject);
+        if (mimFilter)
+        {
+            mimFilter->updateDisplayOfConnectedImage();
+        }
+
     }
     else
     {

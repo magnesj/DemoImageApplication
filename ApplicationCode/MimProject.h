@@ -35,6 +35,6 @@ public:
     MimProject(void);
     virtual ~MimProject(void);
 
-    caf::PdmPointersField<MimImage*> designCases;
+    caf::PdmPointersField<MimImage*> images;
     caf::PdmPointersField<MimFilterSettings*> filterSettings;
 };

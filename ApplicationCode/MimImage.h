@@ -37,7 +37,7 @@ public:
 
     // Public interface
     QImage& image();
-    void    updateDisplayImage();
+    void    redrawImageInDisplayWidget();
     void    restoreOriginalImage();
 
     // Application Framework

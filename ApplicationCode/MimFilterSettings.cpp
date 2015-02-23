@@ -97,17 +97,25 @@ caf::PdmFieldHandle* MimFilterSettings::userDescriptionField()
 //--------------------------------------------------------------------------------------------------
 void MimFilterSettings::fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue)
 {
-    if (changedField == &apply)
+    if (changedField == &imageToManipulate)
+    {
+        MimImage* dc = findImageObjectByName(imageToManipulate);
+        if (dc)
+        {
+            dc->redrawImageInDisplayWidget();
+        }
+    }
+    else if (changedField == &apply)
     {
         applyFilter();
     }
     else if (changedField == &restore)
     {
-        MimImage* dc = findCaseByName(imageToManipulate);
+        MimImage* dc = findImageObjectByName(imageToManipulate);
         if (dc)
         {
             dc->restoreOriginalImage();
-            dc->updateDisplayImage();
+            dc->redrawImageInDisplayWidget();
         }
     }
     else if (changedField == &filterType)
@@ -173,10 +181,10 @@ QList<caf::PdmOptionItemInfo> MimFilterSettings::calculateValueOptions(const caf
         MimProject* proj = MiaApplication::instance()->project();
         if (proj)
         {
-            for (size_t i = 0; i < proj->designCases.size(); i++)
+            for (size_t i = 0; i < proj->images.size(); i++)
             {
-                MimImage* dc = proj->designCases()[i];
-                optionList.push_back(caf::PdmOptionItemInfo(dc->name(), dc->name()));
+                MimImage* mimImage = proj->images()[i];
+                optionList.push_back(caf::PdmOptionItemInfo(mimImage->name(), mimImage->name()));
             }
         }
 
@@ -191,11 +199,11 @@ QList<caf::PdmOptionItemInfo> MimFilterSettings::calculateValueOptions(const caf
 //--------------------------------------------------------------------------------------------------
 void MimFilterSettings::applyFilter()
 {
-    MimImage* dc = findCaseByName(imageToManipulate);
-    if (dc)
+    MimImage* mimImage = findImageObjectByName(imageToManipulate);
+    if (mimImage)
     {
-        dc->restoreOriginalImage();
-        QImage& img = dc->image();
+        mimImage->restoreOriginalImage();
+        QImage& img = mimImage->image();
 
         float weight = 1.0f;
 
@@ -259,7 +267,7 @@ void MimFilterSettings::applyFilter()
             }
         }
 
-        dc->updateDisplayImage();
+        mimImage->redrawImageInDisplayWidget();
     }
 }
 
@@ -298,22 +306,31 @@ std::vector<float> MimFilterSettings::compute1dGaussianKernel(int inRadius, floa
     return kernel;
 }
 
-MimImage* MimFilterSettings::findCaseByName(const QString& caseName) const
+MimImage* MimFilterSettings::findImageObjectByName(const QString& caseName) const
 {
     MimProject* proj = MiaApplication::instance()->project();
     if (proj)
     {
-        for (size_t i = 0; i < proj->designCases.size(); i++)
+        for (size_t i = 0; i < proj->images.size(); i++)
         {
-            MimImage* dc = proj->designCases()[i];
+            MimImage* mimImage = proj->images()[i];
 
-            if (dc->name() == caseName)
+            if (mimImage->name() == caseName)
             {
-                return dc;
+                return mimImage;
             }
         }
     }
 
     return NULL;
+}
+
+void MimFilterSettings::updateDisplayOfConnectedImage()
+{
+    MimImage* mimImage = findImageObjectByName(imageToManipulate);
+    if (mimImage)
+    {
+        mimImage->redrawImageInDisplayWidget();
+    }
 }
 

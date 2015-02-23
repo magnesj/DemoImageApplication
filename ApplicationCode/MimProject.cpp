@@ -28,10 +28,10 @@ MimProject::MimProject(void)
 {
     CAF_PDM_InitObject("Project", "", "", "");
 
-    CAF_PDM_InitFieldNoDefault(&designCases, "DesignCases", "DesignCases", "", "", "");
+    CAF_PDM_InitFieldNoDefault(&images, "DesignCases", "DesignCases", "", "", "");
     CAF_PDM_InitFieldNoDefault(&filterSettings, "FilterSettings", "FilterSettings", "", "", "");
 
-    designCases.push_back(new MimImage);
+    images.push_back(new MimImage);
     //    designCases.setUiHidden(true);
 
     filterSettings.push_back(new MimFilterSettings);

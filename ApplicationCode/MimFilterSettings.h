@@ -51,6 +51,8 @@ public:
     caf::PdmField<bool> apply;
     caf::PdmField<bool> restore;
 
+    void updateDisplayOfConnectedImage();
+
     // Application Framework
     virtual caf::PdmFieldHandle* userDescriptionField();
     virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
@@ -62,7 +64,7 @@ protected:
     virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
 
 private:
-    MimImage* findCaseByName(const QString& caseName) const;
+    MimImage* findImageObjectByName(const QString& caseName) const;
     void applyFilter();
 
     std::vector<float> compute1dGaussianKernel(int inRadius, float inWeight);

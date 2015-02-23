@@ -23,7 +23,7 @@
 
 #include <QFile>
 
-CAF_PDM_SOURCE_INIT(MimImage, "MimDesignCase");
+CAF_PDM_SOURCE_INIT(MimImage, "MimImage");
 
 
 //--------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ CAF_PDM_SOURCE_INIT(MimImage, "MimDesignCase");
 //--------------------------------------------------------------------------------------------------
 MimImage::MimImage(void)
 {
-    CAF_PDM_InitObject("DesignCase", ":/Folder.png", "", "");
+    CAF_PDM_InitObject("MimImage", ":/Folder.png", "", "");
     CAF_PDM_InitField(&name, "name", QString("Case"), "Name", "", "", "");
     CAF_PDM_InitField(&imageFileName, "imageFileName", QString("ImageFilename"), "Image Filename", "", "", "");
     imageFileName.setUiEditorTypeName(caf::PdmUiFilePathEditor::uiEditorTypeName());
@@ -58,7 +58,7 @@ caf::PdmFieldHandle* MimImage::userDescriptionField()
 void MimImage::initAfterRead()
 {
     readImageFromFile();
-    updateDisplayImage();
+    redrawImageInDisplayWidget();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ void MimImage::fieldChangedByUi(const caf::PdmFieldHandle* changedField, const Q
     if (changedField == &imageFileName)
     {
         readImageFromFile();
-        updateDisplayImage();
+        redrawImageInDisplayWidget();
     }
 }
 
@@ -85,7 +85,7 @@ void MimImage::readImageFromFile()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void MimImage::updateDisplayImage()
+void MimImage::redrawImageInDisplayWidget()
 {
     MiuMainWindow::instance()->setImage(m_image);
 }
