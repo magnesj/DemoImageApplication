@@ -2,12 +2,12 @@
 //
 //  Copyright (C) 2014 Ceetron Solutions AS
 // 
-//  <APPLICATION_NAME> is free software: you can redistribute it and/or modify
+//  DemoImageApplication is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 // 
-//  <APPLICATION_NAME> is distributed in the hope that it will be useful, but WITHOUT ANY
+//  DemoImageApplication is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or
 //  FITNESS FOR A PARTICULAR PURPOSE.
 // 
@@ -32,8 +32,6 @@ MimProject::MimProject(void)
     CAF_PDM_InitFieldNoDefault(&filterSettings, "FilterSettings", "FilterSettings", "", "", "");
 
     images.push_back(new MimImage);
-    //    designCases.setUiHidden(true);
-
     filterSettings.push_back(new MimFilterSettings);
 }
 
@@ -52,5 +50,4 @@ MimProject::~MimProject(void)
             listField->deleteAllChildObjects();
         }
     }
-
 }

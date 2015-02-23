@@ -2,12 +2,12 @@
 //
 //  Copyright (C) 2014 Ceetron Solutions AS
 // 
-//  <APPLICATION_NAME> is free software: you can redistribute it and/or modify
+//  DemoImageApplication is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 // 
-//  <APPLICATION_NAME> is distributed in the hope that it will be useful, but WITHOUT ANY
+//  DemoImageApplication is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or
 //  FITNESS FOR A PARTICULAR PURPOSE.
 // 
@@ -87,7 +87,6 @@ MiuMainWindow::MiuMainWindow()
     sm_mainWindowInstance = this;
 }
 
-
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
@@ -139,7 +138,6 @@ void MiuMainWindow::createActions()
 
 }
 
-
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
@@ -151,8 +149,6 @@ void MiuMainWindow::createMenus()
         menu->addAction(m_openProjectAction);
         menu->addAction(m_saveProjectAction);
         menu->addAction(m_saveProjectAsAction);
-        menu->addSeparator();
-        //menu->addAction(caf::PdmCommandFeatureManager::instance()->action("MdcExportSimulationInputFile"));
         
         menu->addSeparator();
         menu->addAction(m_closeProjectAction);
@@ -173,7 +169,6 @@ void MiuMainWindow::createMenus()
     }
 }
 
-
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
@@ -186,8 +181,6 @@ void MiuMainWindow::createToolBars()
         toolbar->addAction(m_newProjectAction);
         toolbar->addAction(m_openProjectAction);
         toolbar->addAction(m_saveProjectAction);
-        //toolbar->addAction(caf::PdmCommandFeatureManager::instance()->action("MdcStartSimulation"));
-
     }
    
 
@@ -200,14 +193,11 @@ void MiuMainWindow::createToolBars()
     }
 }
 
-
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-
 void MiuMainWindow::createDockPanels()
 {
-
     {
         QDockWidget* dockWidget = new QDockWidget("Project Tree", this);
         dockWidget->setObjectName("dockWidget");
@@ -252,8 +242,6 @@ void MiuMainWindow::createDockPanels()
 
         addDockWidget(Qt::RightDockWidgetArea, dockWidget);
     }
-
-   
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -286,40 +274,6 @@ void MiuMainWindow::selectedObjectsChanged(const QItemSelection& selected, const
     {
         m_pdmUiPropertyView->showProperties(NULL);
     }
-
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-caf::PdmPointersFieldHandle* MiuMainWindow::selectedItemInProjectTree()
-{
-    std::vector<caf::PdmUiItem*> uiItems;
-    m_projectTreeView->selectedObjects(uiItems);
-
-    caf::PdmPointersFieldHandle* listField = NULL;
-    if (uiItems.size() > 0)
-    {
-        listField = dynamic_cast<caf::PdmPointersFieldHandle*>(uiItems[0]);
-
-        if (!listField)
-        {
-            caf::PdmObject* pdmObject = dynamic_cast<caf::PdmObject*>(uiItems[0]);
-
-            if (pdmObject)
-            {
-                std::vector<caf::PdmFieldHandle*> parentFields;
-                pdmObject->parentFields(parentFields);
-
-                if (parentFields.size() > 0)
-                {
-                    listField = dynamic_cast<caf::PdmPointersFieldHandle*>(parentFields[0]);
-                }
-            }
-        }
-    }
-
-    return listField;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -400,8 +354,6 @@ void MiuMainWindow::configureGuiProjectChanged()
     m_projectTreeView->treeView()->expandAll();
 
     setWindowCaptionFromAppState();
-   
- 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -528,7 +480,6 @@ void MiuMainWindow::slotUndo()
     }
 }
 
-
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
@@ -621,7 +572,6 @@ void MiuMainWindow::slotNewProject()
     }
 
     MiaApplication::instance()->newProject();
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -664,14 +614,6 @@ void MiuMainWindow::markUndoStackAsClean()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void MiuMainWindow::customMenuRequested(QPoint pos)
-{
-
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
 void MiuMainWindow::slotIndexChanged()
 {
     m_redoAction->setDisabled(!m_undoView->stack()->canRedo());
@@ -681,7 +623,7 @@ void MiuMainWindow::slotIndexChanged()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void MiuMainWindow::setImage(const QImage& image)
+void MiuMainWindow::setDisplayImage(const QImage& image)
 {
     m_imageLabel->setPixmap(QPixmap::fromImage(image));
     m_imageLabel->adjustSize();
