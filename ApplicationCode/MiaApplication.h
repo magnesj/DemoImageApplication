@@ -43,14 +43,14 @@ public:
 
     MimProject* project();
 
-    bool                loadProject();
-    bool                loadProject(const QString& projectFileName);
-    bool                saveProject();
-    bool                saveProjectAs(const QString& fileName);
-    bool                saveProjectPromptForFileName();
+    bool        loadProject();
+    bool        loadProject(const QString& projectFileName);
+    bool        saveProject();
+    bool        saveProjectAs(const QString& fileName);
+    bool        saveProjectPromptForFileName();
 
-    bool                closeProject();
-    void                newProject();
+    bool        closeProject();
+    void        newProject();
 
 private:
     caf::PdmPointer<MimProject> m_project;

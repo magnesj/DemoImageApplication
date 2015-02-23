@@ -33,24 +33,24 @@ public:
 
     // Fields
     caf::PdmField<QString> name;
-
     caf::PdmField<QString> filename;
     caf::PdmField<QString> imageFileName;
-    
-    // 
-    virtual caf::PdmFieldHandle* userDescriptionField();
 
-    virtual void initAfterRead();
-
-    virtual void setupBeforeSave();
-
-    virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
-    virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
-
+    // Public interface
     QImage& image();
     void updateDisplayImage();
-    
     void readImageFromFile();
+
+    // Application Framework
+    virtual caf::PdmFieldHandle* userDescriptionField();
+    virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+
+protected:
+
+    // Application Framework
+    virtual void initAfterRead();
+    virtual void setupBeforeSave();
+    virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
     
 private:
     void updateTextEditContent();

@@ -38,9 +38,10 @@ public:
     caf::PdmPointersField<MimDesignCase*> designCases;
     caf::PdmPointersField<MimFilterSettings*> filterSettings;
 
-
+    // Application Framework
+    virtual void    fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
 protected:
-    virtual void    fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue );
-    virtual void    initAfterRead();
 
+    // Application Framework
+    virtual void    initAfterRead();
 };

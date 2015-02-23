@@ -42,9 +42,7 @@ public:
 
     // Fields
     caf::PdmField<QString> name;
-    
     caf::PdmField<QString> imageToManipulate;
-    
     caf::PdmField< caf::AppEnum<FilterType> > filterType;
 
     caf::PdmField<int> nx;
@@ -53,14 +51,15 @@ public:
     caf::PdmField<bool> apply;
     caf::PdmField<bool> restore;
 
+    // Application Framework
     virtual caf::PdmFieldHandle* userDescriptionField();
-
     virtual void fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+    virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool * useOptionsOnly);
 
+protected:
+    // Application Framework
     virtual void defineEditorAttribute(const caf::PdmFieldHandle* field, QString uiConfigName, caf::PdmUiEditorAttribute * attribute);
     virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
-
-    virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool * useOptionsOnly);
 
 private:
     MimDesignCase* findCaseByName(const QString& caseName) const;

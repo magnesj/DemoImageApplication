@@ -31,14 +31,19 @@ include_directories(
 
 set( APPLICATION_FILES 
     MiaMain.cpp
+    MiaApplication.h
     MiaApplication.cpp
     
+    MimProject.h
     MimProject.cpp
+    MimDesignCase.h
     MimDesignCase.cpp
+    MimFilterSettings.h
     MimFilterSettings.cpp
 )
 
 set( USER_INTERFACE_FILES
+    MiuMainWindow.h
     MiuMainWindow.cpp
 )
 
