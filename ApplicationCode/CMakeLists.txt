@@ -62,7 +62,7 @@ set ( QMOC_HEADER_FILES
 
 set( QRC_FILES
     ${QRC_FILES} 
-    Resources/MinimalApp.qrc
+    Resources/DemoImageApplication.qrc
 )
 
 if (CEE_BUILD_QT5)

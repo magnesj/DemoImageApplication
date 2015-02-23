@@ -29,7 +29,7 @@
 
 
 #define PROJECT_ORGANIZATION_NAME "Ceetron Solutions AS"
-#define PROJECT_APPLICATION_NAME "MinimalApplication"
+#define PROJECT_APPLICATION_NAME "DemoImageApplication"
  
 //--------------------------------------------------------------------------------------------------
 /// 
@@ -149,7 +149,7 @@ bool MiaApplication::saveProjectPromptForFileName()
         startPath = QDir::home().absolutePath();
     }
 
-    startPath += "/MinimalApplication.mip";
+    startPath += "/DemoImageApplication.mip";
 
     QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save File"), startPath, tr("Project Files (*.mip);;All files(*.*)"));
     if (fileName.isEmpty())

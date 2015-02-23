@@ -20,7 +20,7 @@
 #include "MimDesignCase.h"
 #include "MimFilterSettings.h"
 
-CAF_PDM_SOURCE_INIT(MimProject, "MinimalApplicationProject");
+CAF_PDM_SOURCE_INIT(MimProject, "DemoImageApplicationProject");
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------

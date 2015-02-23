@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     setlocale(LC_NUMERIC,"C");
 
     MiuMainWindow window;
-    window.setWindowTitle("MinimalApplication");
+    window.setWindowTitle("DemoImageApplication");
     window.setMinimumSize(800, 600);
     window.show();
 
