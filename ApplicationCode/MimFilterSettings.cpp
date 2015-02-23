@@ -62,7 +62,7 @@ MimFilterSettings::MimFilterSettings(void)
     CAF_PDM_InitField(&filterType, "FilterType", caf::AppEnum<FilterType>(FILTER_SMALL), "Filter Type", "", "", "");
 
     CAF_PDM_InitField(&nx, "NX", 1, "NX", "", "", "");
-    CAF_PDM_InitField(&ny, "NY", 1, "NX", "", "", "");
+    CAF_PDM_InitField(&ny, "NY", 1, "NY", "", "", "");
 
     CAF_PDM_InitField(&applyButton, "Apply", false, "Apply", "", "", "");
     applyButton.setIOReadable(false);
