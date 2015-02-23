@@ -22,7 +22,7 @@
 
 #include "MimProject.h"
 #include "MiaApplication.h"
-#include "MimDesignCase.h"
+#include "MimImage.h"
 
 #include "cafPdmUiPushButtonEditor.h"
 #include "cafPdmUiComboBoxEditor.h"
@@ -103,10 +103,10 @@ void MimFilterSettings::fieldChangedByUi(const caf::PdmFieldHandle* changedField
     }
     else if (changedField == &restore)
     {
-        MimDesignCase* dc = findCaseByName(imageToManipulate);
+        MimImage* dc = findCaseByName(imageToManipulate);
         if (dc)
         {
-            dc->readImageFromFile();
+            dc->restoreOriginalImage();
             dc->updateDisplayImage();
         }
     }
@@ -175,7 +175,7 @@ QList<caf::PdmOptionItemInfo> MimFilterSettings::calculateValueOptions(const caf
         {
             for (size_t i = 0; i < proj->designCases.size(); i++)
             {
-                MimDesignCase* dc = proj->designCases()[i];
+                MimImage* dc = proj->designCases()[i];
                 optionList.push_back(caf::PdmOptionItemInfo(dc->name(), dc->name()));
             }
         }
@@ -191,9 +191,10 @@ QList<caf::PdmOptionItemInfo> MimFilterSettings::calculateValueOptions(const caf
 //--------------------------------------------------------------------------------------------------
 void MimFilterSettings::applyFilter()
 {
-    MimDesignCase* dc = findCaseByName(imageToManipulate);
+    MimImage* dc = findCaseByName(imageToManipulate);
     if (dc)
     {
+        dc->restoreOriginalImage();
         QImage& img = dc->image();
 
         float weight = 1.0f;
@@ -297,14 +298,14 @@ std::vector<float> MimFilterSettings::compute1dGaussianKernel(int inRadius, floa
     return kernel;
 }
 
-MimDesignCase* MimFilterSettings::findCaseByName(const QString& caseName) const
+MimImage* MimFilterSettings::findCaseByName(const QString& caseName) const
 {
     MimProject* proj = MiaApplication::instance()->project();
     if (proj)
     {
         for (size_t i = 0; i < proj->designCases.size(); i++)
         {
-            MimDesignCase* dc = proj->designCases()[i];
+            MimImage* dc = proj->designCases()[i];
 
             if (dc->name() == caseName)
             {

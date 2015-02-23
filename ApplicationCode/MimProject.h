@@ -20,7 +20,7 @@
 
 #include "cafPdmDocument.h"
 
-class MimDesignCase;
+class MimImage;
 class MimFilterSettings;
 
 //==================================================================================================
@@ -35,6 +35,6 @@ public:
     MimProject(void);
     virtual ~MimProject(void);
 
-    caf::PdmPointersField<MimDesignCase*> designCases;
+    caf::PdmPointersField<MimImage*> designCases;
     caf::PdmPointersField<MimFilterSettings*> filterSettings;
 };

@@ -17,7 +17,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 #include "MimProject.h"
-#include "MimDesignCase.h"
+#include "MimImage.h"
 #include "MimFilterSettings.h"
 
 CAF_PDM_SOURCE_INIT(MimProject, "DemoImageApplicationProject");
@@ -31,7 +31,7 @@ MimProject::MimProject(void)
     CAF_PDM_InitFieldNoDefault(&designCases, "DesignCases", "DesignCases", "", "", "");
     CAF_PDM_InitFieldNoDefault(&filterSettings, "FilterSettings", "FilterSettings", "", "", "");
 
-    designCases.push_back(new MimDesignCase);
+    designCases.push_back(new MimImage);
     //    designCases.setUiHidden(true);
 
     filterSettings.push_back(new MimFilterSettings);

@@ -36,8 +36,8 @@ set( APPLICATION_FILES
     
     MimProject.h
     MimProject.cpp
-    MimDesignCase.h
-    MimDesignCase.cpp
+    MimImage.h
+    MimImage.cpp
     MimFilterSettings.h
     MimFilterSettings.cpp
 )

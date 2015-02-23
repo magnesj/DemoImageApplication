@@ -24,7 +24,7 @@
 #include "cafPdmField.h"
 #include "cafAppEnum.h"
 
-class MimDesignCase;
+class MimImage;
 
 
 class MimFilterSettings : public caf::PdmObject
@@ -62,7 +62,7 @@ protected:
     virtual void defineUiOrdering(QString uiConfigName, caf::PdmUiOrdering& uiOrdering);
 
 private:
-    MimDesignCase* findCaseByName(const QString& caseName) const;
+    MimImage* findCaseByName(const QString& caseName) const;
     void applyFilter();
 
     std::vector<float> compute1dGaussianKernel(int inRadius, float inWeight);

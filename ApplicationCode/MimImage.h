@@ -24,12 +24,12 @@
 #include "cafPdmField.h"
 
 
-class MimDesignCase : public caf::PdmObject
+class MimImage : public caf::PdmObject
 {
     CAF_PDM_HEADER_INIT;
 public:
-    MimDesignCase(void);
-    virtual ~MimDesignCase(void);
+    MimImage(void);
+    virtual ~MimImage(void);
 
     // Fields
     caf::PdmField<QString> name;
@@ -37,8 +37,8 @@ public:
 
     // Public interface
     QImage& image();
-    void updateDisplayImage();
-    void readImageFromFile();
+    void    updateDisplayImage();
+    void    restoreOriginalImage();
 
     // Application Framework
     virtual caf::PdmFieldHandle* userDescriptionField();
@@ -48,8 +48,11 @@ protected:
 
     // Application Framework
     virtual void initAfterRead();
-    
+
+private:
+    void readImageFromFile();
 
 private:
     QImage m_image;
+    QImage m_originalImage;
 };

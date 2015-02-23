@@ -20,7 +20,7 @@
 #include "MiuMainWindow.h"
 #include "MiaApplication.h"
 #include "MimProject.h"
-#include "MimDesignCase.h"
+#include "MimImage.h"
 
 #include "cafAppExecCommandManager.h"
 #include "cafCommandFeatureManager.h"
