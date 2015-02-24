@@ -28,7 +28,7 @@ MimProject::MimProject(void)
 {
     CAF_PDM_InitObject("Project", "", "", "");
 
-    CAF_PDM_InitFieldNoDefault(&images, "DesignCases", "DesignCases", "", "", "");
+    CAF_PDM_InitFieldNoDefault(&images, "Images", "Images", "", "", "");
     CAF_PDM_InitFieldNoDefault(&filterSettings, "FilterSettings", "FilterSettings", "", "", "");
 
     images.push_back(new MimImage);
