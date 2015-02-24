@@ -82,6 +82,9 @@ endif()
 source_group( "Application"         FILES ${APPLICATION_FILES} )
 source_group( "UserInterface"       FILES ${USER_INTERFACE_FILES} )
 
+# Organize sub-projects into folders on Visual Studio
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(TARGET cafCommand cafUserInterface cafProjectDataModel PROPERTY FOLDER "AppFwk")
 
 # Default behaviour for a Qt application is a console application, resulting in a console window always being launced at startup
 # The following statement is used to control this behaviour
