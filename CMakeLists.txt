@@ -3,7 +3,9 @@ cmake_minimum_required (VERSION 2.8)
 include (CheckCSourceCompiles)
 project (DemoImageApplication_Master)
 
-
+if(POLICY CMP0020)
+  cmake_policy(SET CMP0020 NEW) # remove if CMake >= 2.8.11 required
+endif()
 
 ################################################################################
 # Setup the main platform defines
@@ -32,21 +34,8 @@ option(CEE_BUILD_QT5 "Build application using Qt5 (if disabled, Qt4 is used)" ON
 ################################################################################
 
 add_subdirectory(Fwk/AppFwk/cafProjectDataModel)
-#add_subdirectory(Fwk/AppFwk/CommonCode)
-#add_subdirectory(Fwk/AppFwk/cafAnimControl)
-#add_subdirectory(Fwk/AppFwk/cafViewer)
 add_subdirectory(Fwk/AppFwk/cafCommand)
 add_subdirectory(Fwk/AppFwk/cafUserInterface)
-#add_subdirectory(Fwk/AppFwk/cafPdmCvf)
-
-include_directories(
-    ${cafUserInterface_SOURCE_DIR}
-    ${cafProjectDataModel_SOURCE_DIR}
-    ${cafPdmCvf_SOURCE_DIR}
-    ${CommonCode_SOURCE_DIR}
-	${cafAnimControl_SOURCE_DIR}
-	${cafViewer_SOURCE_DIR}
-)
 
 
 ################################################################################

@@ -2,10 +2,13 @@ cmake_minimum_required (VERSION 2.8)
 
 project (ApplicationCode)
 
+if(POLICY CMP0020)
+  cmake_policy(SET CMP0020 NEW) # remove if CMake >= 2.8.11 required
+endif()
+
 ################################################################################
 # Qt
 ################################################################################
-
 
 if (CEE_BUILD_QT5)
   find_package(Qt5Widgets)
@@ -22,7 +25,6 @@ endif()
 
 
 include_directories(
-
     ${cafProjectDataModel_SOURCE_DIR}
 	${cafCommand_SOURCE_DIR}
 	${cafUserInterface_SOURCE_DIR}
@@ -125,18 +127,4 @@ set( LINK_LIBRARIES
 
 
 target_link_libraries( ApplicationCode ${LINK_LIBRARIES} ${EXTERNAL_LINK_LIBRARIES})
-
-# Copy Dlls
-if (MSVC)
-
-    # Qt DLLs
-    set (QTLIBLIST QtCore QtCored QtGui QtGuid QtOpenGl QtOpenGld QtNetwork QtNetworkd QtScript QtScriptd QtScriptTools QtScriptToolsd)
-    foreach (qtlib ${QTLIBLIST})
-        add_custom_command(TARGET ResInsight POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${QT_BINARY_DIR}/${qtlib}4.dll"
-                ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>)
-    endforeach( qtlib )
-
-endif(MSVC)
 
